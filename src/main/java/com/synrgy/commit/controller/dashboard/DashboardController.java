@@ -10,6 +10,7 @@ import com.synrgy.commit.repository.oauth.UserRepository;
 import com.synrgy.commit.service.EmailSender;
 import com.synrgy.commit.util.EmailTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,8 @@ public class DashboardController {
     @Autowired
     ReportUserRepository reportUserRepository;
 
-    String url = "http://localhost:8081/api/dashboard";
+    @Value("${baseurl.dev}")
+    String url;
     String success = "alert-success";
     String failed = "alert-danger";
 
