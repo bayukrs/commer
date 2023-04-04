@@ -22,7 +22,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +127,11 @@ public class SimplerImpl implements SimplerService {
         }
     }
 
+    @Override
+    public InputStream image(String image) {
+        return getClass().getResourceAsStream("/payment"+image);
+    }
+
     private User getUserIdToken(Principal principal, Oauth2UserDetailsService userDetailsService) {
         UserDetails user = null;
         String username = principal.getName();
@@ -151,14 +163,28 @@ public class SimplerImpl implements SimplerService {
             throw new FileUploadException("Can only upload jpeg, jpg and png file");
         }
 
-        String nameFiles = file.getOriginalFilename().replaceAll(" ", "-").toLowerCase();
+        String nameFiles = UUID.randomUUID() + "." + extension;
 
-        String tempFileName = "payment/" + UUID.randomUUID() + "." + extension;
+        String tempFileName = "src/main/resources/payment/";
 
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, tempFileName, file.getInputStream(),
-                metadata);
-        amazonS3.putObject(putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead));
+        this.saveFile(tempFileName, nameFiles , file);
 
-        return tempFileName;
+        return "payment/" + nameFiles;
+    }
+
+    public static void saveFile(String uploadDir, String fileName,
+                                MultipartFile multipartFile) throws IOException {
+        Path uploadPath = Paths.get(uploadDir);
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            throw new IOException("Could not save image file: " + fileName, ioe);
+        }
     }
 }

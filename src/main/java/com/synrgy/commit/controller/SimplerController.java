@@ -5,12 +5,16 @@ import com.synrgy.commit.model.SimplerPayment;
 import com.synrgy.commit.service.ProfileService;
 import com.synrgy.commit.service.SimplerService;
 import com.synrgy.commit.util.Response;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.Principal;
 import java.util.Map;
 
@@ -41,5 +45,14 @@ public class SimplerController {
     ){
         Map map = simplerService.history(principal);
         return new ResponseEntity<Map>(map, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/image/payment/{image}")
+    public @ResponseBody byte[] getImage(@PathVariable("image") String image) throws IOException {
+        ClassPathResource classPathResource = new ClassPathResource("/src/main/resources/payment/"+image);
+        InputStream in = getClass().getResourceAsStream("/payment/"+image);
+//        InputStream in = classPathResource.getInputStream();
+        System.out.println("Input : " + in);
+        return IOUtils.toByteArray(in);
     }
 }
