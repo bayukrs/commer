@@ -165,7 +165,7 @@ public class SimplerImpl implements SimplerService {
 
         String nameFiles = UUID.randomUUID() + "." + extension;
 
-        String tempFileName = "src/main/resources/payment/";
+        String tempFileName = "/payment/";
 
         this.saveFile(tempFileName, nameFiles , file);
 

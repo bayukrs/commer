@@ -24,6 +24,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.Map;
 import java.util.UUID;
@@ -221,14 +226,28 @@ public class ProfileImpl implements ProfileService {
             throw new FileUploadException("Can only upload jpeg, jpg and png file");
         }
 
-        String nameFiles = file.getOriginalFilename().replaceAll(" ", "-").toLowerCase();
+        String nameFiles = UUID.randomUUID() + "." + extension;
 
-        String tempFileName = "profpic/" + UUID.randomUUID() + "." + extension;
+        String tempFileName = "/profile/";
 
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, tempFileName, file.getInputStream(),
-                metadata);
-        amazonS3.putObject(putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead));
+        this.saveFile(tempFileName, nameFiles , file);
 
-        return tempFileName;
+        return "profile/" + nameFiles;
+    }
+
+    public static void saveFile(String uploadDir, String fileName,
+                                MultipartFile multipartFile) throws IOException {
+        Path uploadPath = Paths.get(uploadDir);
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            throw new IOException("Could not save image file: " + fileName, ioe);
+        }
     }
 }

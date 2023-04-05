@@ -4,12 +4,18 @@ import com.synrgy.commit.dao.request.AccountsModel;
 import com.synrgy.commit.dao.request.ProfileModel;
 import com.synrgy.commit.service.ProfileService;
 import com.synrgy.commit.util.Response;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.security.Principal;
 import java.util.Map;
 
@@ -51,5 +57,14 @@ public class ProfController {
             e.printStackTrace();
             return new ResponseEntity<Map>(response.ControllerError("Error"), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping(value = "/image/payment/{image}")
+    public @ResponseBody byte[] getImage(@PathVariable("image") String image) throws IOException {
+        File file = new File("/profile/" + image);
+//        InputStream in = getClass().getResourceAsStream("/payment/"+image);
+        InputStream in = new BufferedInputStream(Files.newInputStream(file.toPath()));
+        System.out.println("Input : " + in);
+        return IOUtils.toByteArray(in);
     }
 }

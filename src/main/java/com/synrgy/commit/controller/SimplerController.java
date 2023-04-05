@@ -13,8 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
 import java.security.Principal;
 import java.util.Map;
 
@@ -49,9 +49,9 @@ public class SimplerController {
 
     @GetMapping(value = "/image/payment/{image}")
     public @ResponseBody byte[] getImage(@PathVariable("image") String image) throws IOException {
-        ClassPathResource classPathResource = new ClassPathResource("/src/main/resources/payment/"+image);
-        InputStream in = getClass().getResourceAsStream("/payment/"+image);
-//        InputStream in = classPathResource.getInputStream();
+        File file = new File("/payment/" + image);
+//        InputStream in = getClass().getResourceAsStream("/payment/"+image);
+        InputStream in = new BufferedInputStream(Files.newInputStream(file.toPath()));
         System.out.println("Input : " + in);
         return IOUtils.toByteArray(in);
     }
