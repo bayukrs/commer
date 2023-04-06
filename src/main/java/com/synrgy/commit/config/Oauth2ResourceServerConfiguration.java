@@ -31,7 +31,7 @@ public class Oauth2ResourceServerConfiguration extends ResourceServerConfigurerA
                 .disable()
                 .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/","/showFile/**","/v1/showFile/**","/v1/upload", "/user-register/**","/forget-password/**", "/oauth/authorize**", "/login**", "/error**","/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**","/login/**","/user-login/**", "/register", "/login/", "/dashboard/**", "/resources/**", "/api/static/**", "/assets/**", "/static/**", "/css/**", "/simpler/image/payment/**")
+                .antMatchers("/","/showFile/**","/v1/showFile/**","/v1/upload", "/user-register/**","/forget-password/**", "/oauth/authorize**", "/login**", "/error**","/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**","/login/**","/user-login/**", "/register", "/login/", "/dashboard/**", "/resources/**", "/api/static/**", "/assets/**", "/static/**", "/css/**", "/simpler/image/payment/**", "/post/image/post/**", "/profile/image/profile/**")
                 .permitAll()
                 .antMatchers("/v1/role-test-global/list-barang").hasAnyAuthority("ROLE_READ")
                 .antMatchers("/v1/role-test-global/post-barang").hasAnyAuthority("ROLE_WRITE")
