@@ -11,11 +11,13 @@ import com.synrgy.commit.repository.oauth.UserRepository;
 import com.synrgy.commit.service.PostService;
 import com.synrgy.commit.service.oauth.Oauth2UserDetailsService;
 import com.synrgy.commit.util.Response;
+import org.apache.commons.io.IOUtils;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +25,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -84,6 +89,15 @@ public class PostController {
             e.printStackTrace();
             return new ResponseEntity<Map>(response.ControllerError("Error"), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping(value = "/image/post/{image}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    public @ResponseBody byte[] getImage(@PathVariable("image") String image) throws IOException {
+        File file = new File("/post/" + image);
+//        InputStream in = getClass().getResourceAsStream("/payment/"+image);
+        InputStream in = new BufferedInputStream(Files.newInputStream(file.toPath()));
+        System.out.println("Input : " + in);
+        return IOUtils.toByteArray(in);
     }
 
     @PutMapping("/edit/{idPost}")

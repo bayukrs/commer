@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,7 +48,7 @@ public class SimplerController {
         return new ResponseEntity<Map>(map, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/image/payment/{image}")
+    @GetMapping(value = "/image/payment/{image}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public @ResponseBody byte[] getImage(@PathVariable("image") String image) throws IOException {
         File file = new File("/payment/" + image);
 //        InputStream in = getClass().getResourceAsStream("/payment/"+image);
