@@ -82,7 +82,7 @@ public class ProfileImpl implements ProfileService {
 
             String tempFileName = this.upload(file);
 
-            userr.setProfile_pic(fileBaseUrl+tempFileName);
+            userr.setProfile_pic(fileBaseUrl+"profile/image/"+tempFileName);
             userr.setBio(objModel.getBio());
             userr.setFullname(objModel.getFullname());
 

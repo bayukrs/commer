@@ -137,7 +137,7 @@ public class PostImpl implements PostService {
 
                     FilePost filePost = new FilePost();
                     filePost.setPost(obj);
-                    filePost.setUrl(fileBaseUrl + tempFileName);
+                    filePost.setUrl(fileBaseUrl+ "post/image/post" + tempFileName);
 
                     FilePost save = filePostRepository.save(filePost);
             }

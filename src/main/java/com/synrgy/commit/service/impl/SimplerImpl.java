@@ -98,7 +98,7 @@ public class SimplerImpl implements SimplerService {
             simplerPayment.setPlan(objModel.getPlan());
             simplerPayment.setPayment_method(method_payment);
             simplerPayment.setStatus("On Progress");
-            simplerPayment.setImage_payment(fileBaseUrl+tempFileName);
+            simplerPayment.setImage_payment(fileBaseUrl+"simpler/image"+tempFileName);
             simplerPayment.setId_user(idUser);
             simplerPayment.setTotal_paid("IDR "+total_paid);
             simplerPayment.setTransaction_id(objModel.getTransaction_id());
