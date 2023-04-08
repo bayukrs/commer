@@ -26,7 +26,7 @@
             </a>
         </div>
         <div class="logo logo-mini">
-            <a href="#" class="simple-text">
+            <a th:href="${url}" class="simple-text">
                 DC
             </a>
         </div>
@@ -57,7 +57,7 @@
                             <b class="caret"></b>
                         </p>
                     </a>
-                    <div class="collapse in" id="formsExamples" aria-expanded="true">
+                    <div class="collapse" id="formsExamples" aria-expanded="true">
                         <ul class="nav">
                             <li>
                             <li>
@@ -69,7 +69,6 @@
                             <li>
                                 <a th:href="${url}+'/report/user'">Report User</a>
                             </li>
-                            </li>
                         </ul>
                     </div>
                 </li>
@@ -79,13 +78,13 @@
                         <p>Simpler Payment</p>
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a th:href="${url}+'/verify-user'">
                         <i class="material-icons">assignment_ind</i>
                         <p>Verify User</p>
                     </a>
                 </li>
-                <li>
+                <li class="active">
                     <a th:href="${url}+'/product'">
                         <i class="material-icons">payment</i>
                         <p>Product</p>
@@ -110,7 +109,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#"> Verify User </a>
+                    <a class="navbar-brand" href="#">Product</a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -136,76 +135,45 @@
                     <span data-notify="message">[[${message}]]</span>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-md-12">
+                    <div class="col-md-12">
                         <div class="card">
                             <div class="card-header card-header-icon" data-background-color="rose">
-                                <i class="material-icons">search</i>
+                                <i class="material-icons">perm_identity</i>
                             </div>
-                            <h4 class="card-title">Filter Data</h4>
-                            <form method="post" th:action="${url}+'/verify-user'" th:object="${searchEmail}" >
-                                <div class="card-content">
-                                    <div style="height:3px"></div>
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <div class="form-group label-floating is-empty">
-                                                <label class="control-label">
-                                                    Email
-                                                </label>
-                                                <input class="form-control" name="email" type="text" value="">
-                                                <span class="material-input"></span></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-footer text-right">
-                                        <button type="submit" class="btn btn-rose btn-fill">Search</button>
-                                    </div>
-
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div th:if="${detail}" class="col-xs-12 col-md-12">
-                        <div class="card">
-                            <div class="card-header card-header-icon" data-background-color="rose">
-                                <i class="material-icons">assignment</i>
-                            </div>
-                            <h4 class="card-title">Detail User</h4>
+                            <a th:href="${url}+'/product/create'">
+                                <button type="button" rel="tooltip" class="btn btn-success btn-round">
+                                    <h4 class="card-title">Add New Product</h4>
+                                </button>
+                            </a>
                             <div class="card-content">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th th:utext="${detail.fullname}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Email</th>
-                                            <th th:utext="${detail.username}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Gender</th>
-                                            <th th:utext="${detail.gender}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Phone Number</th>
-                                            <th th:utext="${detail.phone_number}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Interest</th>
-                                            <th th:utext="${detail.passion}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Status</th>
-                                            <th th:utext="${detail.status}"></th>
-                                        </tr>
-                                        </thead>
-                                    </table>
-                                        <div class="form-footer text-right">
-                                            <a th:href="${url}+'/verify-user/action/'+${detail.id}" class="dropdown-toggle" onclick="if(!confirm('Apakah Anda ingin mengubah status user?')){ return false; }">
-                                            <button class="btn btn-info btn-success">Verify Account</button>
+                                <h4 class="card-title">Product</h4>
+                                <h5 th:utext="'Total Data : ' + ${totaldata}" class="card-title"></h5>
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center">Actions</th>
+                                        <th class="text-center">ID Product</th>
+                                        <th class="text-center">Name</th>
+                                        <th class="text-center">Is Sold</th>
+                                        <th class="text-center">Date Created</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each ="product : ${products}">
+                                        <td class="td-actions text-center">
+                                            <a th:href="${url}+'/product/detail/'+${product.id}">
+                                                <button type="button" rel="tooltip" class="btn btn-success btn-round">
+                                                    <i class="material-icons">visibility</i>
+                                                </button>
                                             </a>
-                                        </div>
-                                </div>
+                                        </td>
+                                        <td th:utext="${product.id}" class="text-center"></td>
+                                        <td th:utext="${product.name}" class="text-center"></td>
+                                        <td th:utext="${product.sold}" class="text-center"></td>
+                                        <td th:utext="${product.addedDate}" class="text-center"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

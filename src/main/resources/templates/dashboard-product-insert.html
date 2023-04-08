@@ -26,7 +26,7 @@
             </a>
         </div>
         <div class="logo logo-mini">
-            <a href="#" class="simple-text">
+            <a th:href="${url}" class="simple-text">
                 DC
             </a>
         </div>
@@ -57,7 +57,7 @@
                             <b class="caret"></b>
                         </p>
                     </a>
-                    <div class="collapse in" id="formsExamples" aria-expanded="true">
+                    <div class="collapse" id="formsExamples" aria-expanded="true">
                         <ul class="nav">
                             <li>
                             <li>
@@ -69,7 +69,6 @@
                             <li>
                                 <a th:href="${url}+'/report/user'">Report User</a>
                             </li>
-                            </li>
                         </ul>
                     </div>
                 </li>
@@ -79,13 +78,13 @@
                         <p>Simpler Payment</p>
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a th:href="${url}+'/verify-user'">
                         <i class="material-icons">assignment_ind</i>
                         <p>Verify User</p>
                     </a>
                 </li>
-                <li>
+                <li class="active">
                     <a th:href="${url}+'/product'">
                         <i class="material-icons">payment</i>
                         <p>Product</p>
@@ -110,13 +109,13 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#"> Verify User </a>
+                    <a class="navbar-brand" href="#">Insert Product</a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="separator hidden-lg hidden-md"></li>
                         <li>
-                            <a th:href="${url}+'/logout'" class="dropdown-toggle" onclick="if(!confirm('Apakah Anda ingin keluar?')){ return false; }">
+                            <a th:href="${url}+'/login'" class="dropdown-toggle" onclick="if(!confirm('Apakah Anda ingin keluar?')){ return false; }">
                                 <i class="material-icons">power_settings_new</i>
                                 <p class="hidden-lg hidden-md">Logout</p>
                             </a>
@@ -139,73 +138,47 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="card">
                             <div class="card-header card-header-icon" data-background-color="rose">
-                                <i class="material-icons">search</i>
+                                <i class="material-icons">info</i>
                             </div>
-                            <h4 class="card-title">Filter Data</h4>
-                            <form method="post" th:action="${url}+'/verify-user'" th:object="${searchEmail}" >
-                                <div class="card-content">
-                                    <div style="height:3px"></div>
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <div class="form-group label-floating is-empty">
-                                                <label class="control-label">
-                                                    Email
-                                                </label>
-                                                <input class="form-control" name="email" type="text" value="">
-                                                <span class="material-input"></span></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-footer text-right">
-                                        <button type="submit" class="btn btn-rose btn-fill">Search</button>
-                                    </div>
-
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div th:if="${detail}" class="col-xs-12 col-md-12">
-                        <div class="card">
-                            <div class="card-header card-header-icon" data-background-color="rose">
-                                <i class="material-icons">assignment</i>
-                            </div>
-                            <h4 class="card-title">Detail User</h4>
+                            <h4 class="card-title">Insert Product</h4>
                             <div class="card-content">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th th:utext="${detail.fullname}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Email</th>
-                                            <th th:utext="${detail.username}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Gender</th>
-                                            <th th:utext="${detail.gender}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Phone Number</th>
-                                            <th th:utext="${detail.phone_number}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Interest</th>
-                                            <th th:utext="${detail.passion}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Status</th>
-                                            <th th:utext="${detail.status}"></th>
-                                        </tr>
-                                        </thead>
-                                    </table>
-                                        <div class="form-footer text-right">
-                                            <a th:href="${url}+'/verify-user/action/'+${detail.id}" class="dropdown-toggle" onclick="if(!confirm('Apakah Anda ingin mengubah status user?')){ return false; }">
-                                            <button class="btn btn-info btn-success">Verify Account</button>
-                                            </a>
-                                        </div>
-                                </div>
+                                <form name="formNews" class="form-horizontal r-separator m-t-30" th:action="@{'/dashboard/product/insert'}" enctype="multipart/form-data" method="post">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>
+                                                    <input type="text" th:field="${product.name}" class="form-control" placeholder="Please input type Title" maxlength="150" autocomplete="off"/>
+                                                </th>
+<!--                                                <th th:utext="${product.name}"></th>-->
+                                            </tr>
+                                            <tr>
+                                                <th>Price</th>
+                                                <th>
+                                                    <input type="text" th:field="${product.price}" class="form-control" placeholder="Please input type Title" maxlength="150" autocomplete="off"/>
+                                                </th>
+<!--                                                <th th:utext="${product.price} + ' Month'" ></th>-->
+                                            </tr>
+                                            <tr>
+                                                <th>Description</th>
+                                                <th>
+                                                    <textarea name="editor-custom" type="text" id="editor-custom" th:field="${product.desc}" class="ckeditor"></textarea>
+                                                </th>
+<!--                                                <th th:utext="${product.sold}" ></th>-->
+                                            </tr>
+                                            <tr>
+                                                <th>Image</th>
+                                                <th>
+                                                    <input type="file" name="file" id="imageUpload_color" class="btn btn-info" accept=".png" data-max-width="500" data-max-height="500" data-min-width="500" data-min-height="500" required>
+                                                </th>
+<!--                                                <th><img width="100px" th:src="${product.image}"></th>-->
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                        <button type="submit" class="btn btn-info" id="btnSave">Save</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,6 @@
 package com.synrgy.commit.controller.dashboard;
 
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.synrgy.commit.dao.request.ChangeStatus;
 import com.synrgy.commit.dao.request.LoginAdmin;
 import com.synrgy.commit.dao.request.SearchEmailDashboard;
@@ -9,19 +10,30 @@ import com.synrgy.commit.repository.*;
 import com.synrgy.commit.repository.oauth.UserRepository;
 import com.synrgy.commit.service.EmailSender;
 import com.synrgy.commit.util.EmailTemplate;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -44,11 +56,15 @@ public class DashboardController {
     public EmailSender emailSender;
     @Autowired
     ReportUserRepository reportUserRepository;
+    @Autowired
+    public ProductRepository productRepository;
 
     @Value("${baseurl.dev}")
     String url;
     String success = "alert-success";
     String failed = "alert-danger";
+    @Value("${file.base.url.aws}")
+    private String fileBaseUrl;
 
     @GetMapping(value = {"/login"})
     public String index(Model model) {
@@ -164,6 +180,75 @@ public class DashboardController {
         model.addAttribute("url", url);
         model.addAttribute("reportcomment", reportComment);
         return "dashboard-report-comment-detail";
+    }
+
+    @GetMapping(value = {"/product"})
+    public String ListProduct(Model model, HttpSession req, RedirectAttributes redirAttrs) {
+
+        if (req.getAttribute("Admin") == null) {
+            redirAttrs.addFlashAttribute("message", "Login terlebih dahulu!");
+            redirAttrs.addFlashAttribute("alerto", failed);
+            return "redirect:/dashboard/login";
+        }
+
+        List<ProductEntity> product = null;
+        product = productRepository.findAll();
+        Long totaldata = 0L;
+        totaldata = (long) product.size();
+        model.addAttribute("title", "Dashboard Commer | Report Comment");
+        model.addAttribute("url", url);
+        model.addAttribute("products", product);
+        model.addAttribute("totaldata", totaldata);
+        return "dashboard-product";
+    }
+
+    @GetMapping(value = {"/product/detail/{id}"})
+    public String DetailProduct(Model model, @PathVariable(value = "id") Long id_comment, HttpSession req, RedirectAttributes redirAttrs) {
+        if (req.getAttribute("Admin") == null) {
+            redirAttrs.addFlashAttribute("message", "Login terlebih dahulu!");
+            redirAttrs.addFlashAttribute("alerto", failed);
+            return "redirect:/dashboard/login";
+        }
+        ProductEntity product = productRepository.findById(id_comment).get();
+        model.addAttribute("title", "Dashboard Commer | Detail Report Comment");
+        model.addAttribute("url", url);
+        model.addAttribute("product", product);
+        return "dashboard-product-detail";
+    }
+
+    @GetMapping(value = {"/product/create"})
+    public String CreateProduct(Model model, HttpSession req, RedirectAttributes redirAttrs) {
+        if (req.getAttribute("Admin") == null) {
+            redirAttrs.addFlashAttribute("message", "Login terlebih dahulu!");
+            redirAttrs.addFlashAttribute("alerto", failed);
+            return "redirect:/dashboard/login";
+        }
+//        ProductEntity product = productRepository.findById(id_comment).get();
+        model.addAttribute("title", "Dashboard Commer | Detail Report Comment");
+        model.addAttribute("url", url);
+        model.addAttribute("product", new ProductEntity());
+        return "dashboard-product-insert";
+    }
+
+    @PostMapping(value = {"/product/insert"})
+    public String InsertProduct(Model model,
+                                @RequestParam("file") MultipartFile file,
+                                @ModelAttribute ProductEntity product,
+                                HttpSession req, RedirectAttributes redirAttrs) throws IOException {
+        if (req.getAttribute("Admin") == null) {
+            redirAttrs.addFlashAttribute("message", "Login terlebih dahulu!");
+            redirAttrs.addFlashAttribute("alerto", failed);
+            return "redirect:/dashboard/login";
+        }
+        String tempFileName = this.upload(file);
+        product.setImage(fileBaseUrl+"product/image/"+tempFileName);
+        product.setSold(false);
+        productRepository.save(product);
+//        ProductEntity product = productRepository.findById(id_comment).get();
+        model.addAttribute("title", "Dashboard Commer | Detail Report Comment");
+        model.addAttribute("url", url);
+        model.addAttribute("product", new ProductEntity());
+        return "redirect:/dashboard/product";
     }
 
     @GetMapping(value = {"/report/comment/action/{id_comment}"})
@@ -427,5 +512,43 @@ public class DashboardController {
         redirAttrs.addFlashAttribute("message", "Logout Berhasil!");
         redirAttrs.addFlashAttribute("alerto", success);
         return "redirect:/dashboard/login";
+    }
+    private String upload(MultipartFile file) throws IOException {
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        if (extension.equals("jpeg") || extension.equals("jpg")) {
+            metadata.setContentType("image/jpg");
+        } else if (extension.equals("png")) {
+            metadata.setContentType("image/png");
+        } else {
+            throw new FileUploadException("Can only upload jpeg, jpg and png file");
+        }
+
+        String nameFiles = UUID.randomUUID() + "." + extension;
+
+        String tempFileName = "/product/";
+
+        this.saveFile(tempFileName, nameFiles , file);
+
+        return "product/" + nameFiles;
+    }
+
+    public static void saveFile(String uploadDir, String fileName,
+                                MultipartFile multipartFile) throws IOException {
+        Path uploadPath = Paths.get(uploadDir);
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ioe) {
+            throw new IOException("Could not save image file: " + fileName, ioe);
+        }
     }
 }
