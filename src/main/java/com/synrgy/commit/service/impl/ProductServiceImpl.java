@@ -214,7 +214,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String updateStatus(ReqCallbackTransaction transactionDetails) {
-        Optional<HistoryEntity> historyEntityOptional = historyRepository.findById(Long.valueOf(transactionDetails.getOrder_id()));
+        String[] id = transactionDetails.getOrder_id().split("-");
+        Optional<HistoryEntity> historyEntityOptional = historyRepository.findById(Long.valueOf(id[0]));
         if (!historyEntityOptional.isPresent()){
             return null;
         }
