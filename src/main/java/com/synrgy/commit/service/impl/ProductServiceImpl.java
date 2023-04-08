@@ -1,9 +1,6 @@
 package com.synrgy.commit.service.impl;
 
-import com.synrgy.commit.dao.request.ReqCreatePayment;
-import com.synrgy.commit.dao.request.ReqCustomerDetail;
-import com.synrgy.commit.dao.request.ReqItemDetail;
-import com.synrgy.commit.dao.request.ReqTransactionDetail;
+import com.synrgy.commit.dao.request.*;
 import com.synrgy.commit.dao.response.BaseResponse;
 import com.synrgy.commit.dao.response.ResCreatePayment;
 import com.synrgy.commit.dao.response.ResHistoryTransaction;
@@ -99,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public BaseResponse<String> buyProduct(Long id, Principal principal) {
+    public BaseResponse<?> buyProduct(Long id, Principal principal) {
         Optional<ProductEntity> productEntity = productRepository.findById(id);
         if (!productEntity.isPresent()){
             return BaseResponse.<String>builder()
@@ -158,10 +155,10 @@ public class ProductServiceImpl implements ProductService {
         historyRepository.save(historyEntity);
         productEntity.get().setSold(true);
         productRepository.save(productEntity.get());
-        return BaseResponse.<String>builder()
+        return BaseResponse.<ResCreatePayment>builder()
                 .status("success")
                 .message("Success Buy Product")
-                .data(null).build();
+                .data(resCreatePayment).build();
     }
 
     @Override
@@ -216,7 +213,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String updateStatus(ReqTransactionDetail transactionDetails) {
+    public String updateStatus(ReqCallbackTransaction transactionDetails) {
         Optional<HistoryEntity> historyEntityOptional = historyRepository.findById(Long.valueOf(transactionDetails.getOrder_id()));
         if (!historyEntityOptional.isPresent()){
             return null;

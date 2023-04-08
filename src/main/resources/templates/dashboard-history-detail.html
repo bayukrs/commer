@@ -84,14 +84,14 @@
                         <p>Verify User</p>
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a th:href="${url}+'/product'">
                         <i class="material-icons">payment</i>
                         <p>Product</p>
                     </a>
                 </li>
-                <li>
-                    <a th:href="${url}+'/historu'">
+                <li class="active">
+                    <a th:href="${url}+'/history'">
                         <i class="material-icons">payment</i>
                         <p>History</p>
                     </a>
@@ -115,7 +115,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#"> Simpler Payment Detail </a>
+                    <a class="navbar-brand" href="#"> History Payment Detail </a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -146,6 +146,38 @@
                             <div class="card-header card-header-icon" data-background-color="rose">
                                 <i class="material-icons">info</i>
                             </div>
+                            <h4 class="card-title">Detail Payment</h4>
+                            <div class="card-content">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Transaction ID</th>
+                                            <th th:utext="${history.id}"></th>
+                                        </tr>
+                                        <tr>
+                                            <th>User</th>
+                                            <th th:utext="${history.user.id}"></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th th:utext="${history.payed}" ></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Created Date</th>
+                                            <th th:utext="${history.addedDate}" ></th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <div class="card">
+                            <div class="card-header card-header-icon" data-background-color="rose">
+                                <i class="material-icons">assignment</i>
+                            </div>
                             <h4 class="card-title">Detail Product</h4>
                             <div class="card-content">
                                 <div class="table-responsive">
@@ -168,7 +200,7 @@
                                             <th th:utext="${product.desc}" ></th>
                                         </tr>
                                         <tr>
-                                            <th>Status</th>
+                                            <th>Is Paid</th>
                                             <th th:utext="${product.sold}" ></th>
                                         </tr>
                                         <tr>

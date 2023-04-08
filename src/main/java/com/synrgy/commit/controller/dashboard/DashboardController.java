@@ -58,6 +58,8 @@ public class DashboardController {
     ReportUserRepository reportUserRepository;
     @Autowired
     public ProductRepository productRepository;
+    @Autowired
+    public HistoryRepository historyRepository;
 
     @Value("${baseurl.dev}")
     String url;
@@ -180,6 +182,42 @@ public class DashboardController {
         model.addAttribute("url", url);
         model.addAttribute("reportcomment", reportComment);
         return "dashboard-report-comment-detail";
+    }
+
+    @GetMapping(value = {"/history"})
+    public String historyTransaction(Model model, HttpSession req, RedirectAttributes redirAttrs) {
+
+        if (req.getAttribute("Admin") == null) {
+            redirAttrs.addFlashAttribute("message", "Login terlebih dahulu!");
+            redirAttrs.addFlashAttribute("alerto", failed);
+            return "redirect:/dashboard/login";
+        }
+
+        List<HistoryEntity> product = null;
+        product = historyRepository.findAll();
+        Long totaldata = 0L;
+        totaldata = (long) product.size();
+        model.addAttribute("title", "Dashboard Commer | History Transaction");
+        model.addAttribute("url", url);
+        model.addAttribute("histories", product);
+        model.addAttribute("totaldata", totaldata);
+        return "dashboard-history";
+    }
+
+    @GetMapping(value = {"/history/detail/{id}"})
+    public String historyDetail(Model model, @PathVariable(value = "id") Long id_comment, HttpSession req, RedirectAttributes redirAttrs) {
+        if (req.getAttribute("Admin") == null) {
+            redirAttrs.addFlashAttribute("message", "Login terlebih dahulu!");
+            redirAttrs.addFlashAttribute("alerto", failed);
+            return "redirect:/dashboard/login";
+        }
+        HistoryEntity history = historyRepository.findById(id_comment).get();
+        ProductEntity product = history.getProduct();
+        model.addAttribute("title", "Dashboard Commer | Detail Report Comment");
+        model.addAttribute("url", url);
+        model.addAttribute("history", history);
+        model.addAttribute("product", product);
+        return "dashboard-history-detail";
     }
 
     @GetMapping(value = {"/product"})

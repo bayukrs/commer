@@ -84,14 +84,14 @@
                         <p>Verify User</p>
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a th:href="${url}+'/product'">
                         <i class="material-icons">payment</i>
                         <p>Product</p>
                     </a>
                 </li>
-                <li>
-                    <a th:href="${url}+'/historu'">
+                <li class="active">
+                    <a th:href="${url}+'/history'">
                         <i class="material-icons">payment</i>
                         <p>History</p>
                     </a>
@@ -115,13 +115,13 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#"> Simpler Payment Detail </a>
+                    <a class="navbar-brand" href="#">Product</a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="separator hidden-lg hidden-md"></li>
                         <li>
-                            <a th:href="${url}+'/login'" class="dropdown-toggle" onclick="if(!confirm('Apakah Anda ingin keluar?')){ return false; }">
+                            <a th:href="${url}+'/logout'" class="dropdown-toggle" onclick="if(!confirm('Apakah Anda ingin keluar?')){ return false; }">
                                 <i class="material-icons">power_settings_new</i>
                                 <p class="hidden-lg hidden-md">Logout</p>
                             </a>
@@ -141,47 +141,40 @@
                     <span data-notify="message">[[${message}]]</span>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-md-12">
+                    <div class="col-md-12">
                         <div class="card">
                             <div class="card-header card-header-icon" data-background-color="rose">
-                                <i class="material-icons">info</i>
+                                <i class="material-icons">perm_identity</i>
                             </div>
-                            <h4 class="card-title">Detail Product</h4>
                             <div class="card-content">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Product ID</th>
-                                            <th th:utext="${product.id}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th th:utext="${product.name}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Price</th>
-                                            <th th:utext="${product.price}" ></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Description</th>
-                                            <th th:utext="${product.desc}" ></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Status</th>
-                                            <th th:utext="${product.sold}" ></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Image</th>
-                                            <th><img width="100px" th:src="${product.image}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th>Created Date</th>
-                                            <th th:utext="${product.addedDate}" ></th>
-                                        </tr>
-                                        </thead>
-                                    </table>
-                                </div>
+                                <h4 class="card-title">History Transaction</h4>
+                                <h5 th:utext="'Total Data : ' + ${totaldata}" class="card-title"></h5>
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center">Actions</th>
+                                        <th class="text-center">ID Transaction</th>
+                                        <th class="text-center">amount</th>
+                                        <th class="text-center">Is Payed</th>
+                                        <th class="text-center">Date Created</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each ="history : ${histories}">
+                                        <td class="td-actions text-center">
+                                            <a th:href="${url}+'/history/detail/'+${history.id}">
+                                                <button type="button" rel="tooltip" class="btn btn-success btn-round">
+                                                    <i class="material-icons">visibility</i>
+                                                </button>
+                                            </a>
+                                        </td>
+                                        <td th:utext="${history.id}" class="text-center"></td>
+                                        <td th:utext="${history.product.price}" class="text-center"></td>
+                                        <td th:utext="${history.payed}" class="text-center"></td>
+                                        <td th:utext="${history.addedDate}" class="text-center"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

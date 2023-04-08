@@ -1,5 +1,6 @@
 package com.synrgy.commit.controller;
 
+import com.synrgy.commit.dao.request.ReqCallbackTransaction;
 import com.synrgy.commit.dao.request.ReqCreatePayment;
 import com.synrgy.commit.dao.request.ReqTransactionDetail;
 import com.synrgy.commit.dao.response.BaseResponse;
@@ -61,7 +62,7 @@ public class ProductController {
     @GetMapping("/buy/{id}")
     public ResponseEntity<BaseResponse<?>> buyProduct(@PathVariable("id") Long id,
                                                       Principal principal){
-        BaseResponse<String> response = productService.buyProduct(id, principal);
+        BaseResponse<?> response = productService.buyProduct(id, principal);
         return ResponseEntity.ok(response);
     }
 
@@ -108,16 +109,8 @@ public class ProductController {
     }
 
     @PostMapping("/callback")
-    private ResponseEntity<BaseResponse<?>> getStatusTransaction(@RequestBody ReqCreatePayment reqCreatePayment,
-                                                                 @RequestHeader("Authorization") String auth
-                                                                 ){
-        if (auth != "U0ItTWlkLXNlcnZlci0xRTZLZG9XLW45OXJMb0dGbVAxSUhKVU86"){
-            return ResponseEntity.status(401).body(BaseResponse.builder()
-                            .status("False")
-                            .message("UnAuthorized")
-                            .build());
-        }
-        String result = productService.updateStatus(reqCreatePayment.getTransaction_details());
+    private ResponseEntity<BaseResponse<?>> getStatusTransaction(@RequestBody ReqCallbackTransaction reqCreatePayment){
+        String result = productService.updateStatus(reqCreatePayment);
         if (result == null){
             return ResponseEntity.status(400).body(BaseResponse.builder()
                     .status("False")
