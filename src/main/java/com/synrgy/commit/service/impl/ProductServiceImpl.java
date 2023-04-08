@@ -197,9 +197,10 @@ public class ProductServiceImpl implements ProductService {
         }
         HistoryEntity h = history.get();
         ResProductDto productDto = ResProductDto.builder()
+                .id(h.getProduct().getId())
                     .name(h.getProduct().getName())
                     .images(h.getProduct().getImage())
-                    .desc(h.getProduct().getImage())
+                    .desc(h.getProduct().getDesc())
                     .price(IdrFormatMoney.currencyIdrFromDouble(h.getProduct().getPrice()))
                     .build();
         ResHistoryTransaction historyTransaction = ResHistoryTransaction.builder()
