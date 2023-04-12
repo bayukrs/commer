@@ -123,7 +123,7 @@ public class ProductController {
                 .build());
     }
 
-    @GetMapping(value = "/image/profile/{image}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    @GetMapping(value = "/image/product/{image}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public @ResponseBody byte[] getImage(@PathVariable("image") String image) throws IOException {
         File file = new File("/product/" + image);
 //        InputStream in = getClass().getResourceAsStream("/payment/"+image);
