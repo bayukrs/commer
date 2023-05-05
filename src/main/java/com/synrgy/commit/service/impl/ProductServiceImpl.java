@@ -115,7 +115,7 @@ public class ProductServiceImpl implements ProductService {
         HistoryEntity historyEntity = new HistoryEntity();
         historyEntity.setProduct(productEntity.get());
         historyEntity.setPayed(false);
-        historyEntity.setUser(userOptional.get());
+//        historyEntity.setUser(userOptional.get());
         historyEntity = historyRepository.save(historyEntity);
         ReqTransactionDetail transactionDetail = ReqTransactionDetail.builder()
                 .order_id(historyEntity.getId().toString())
