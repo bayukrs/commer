@@ -62,8 +62,8 @@ public class User implements UserDetails, Serializable {
     @Column(length = 100, nullable = true)
     private String fullname;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<HistoryEntity> historyEntities;
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    private List<HistoryEntity> historyEntities;
 
     @JsonIgnore
     private String password;
@@ -216,13 +216,13 @@ public class User implements UserDetails, Serializable {
         this.is_change = is_change;
     }
 
-    public List<HistoryEntity> getHistoryEntities() {
-        return historyEntities;
-    }
-
-    public void setHistoryEntities(List<HistoryEntity> historyEntities) {
-        this.historyEntities = historyEntities;
-    }
+//    public List<HistoryEntity> getHistoryEntities() {
+//        return historyEntities;
+//    }
+//
+//    public void setHistoryEntities(List<HistoryEntity> historyEntities) {
+//        this.historyEntities = historyEntities;
+//    }
 
     @Override
     public String getUsername() {

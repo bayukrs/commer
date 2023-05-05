@@ -25,9 +25,9 @@ public class HistoryEntity {
     private String linkPayment;
     @Column(name = "is_pay")
     private Boolean payed;
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     @CreationTimestamp
     @Column(name = "added_date")
     private Date addedDate;
