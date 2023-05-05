@@ -170,7 +170,7 @@ public class ProductServiceImpl implements ProductService {
             return null;
         }
         List<ResHistoryTransaction> historyTransactions = new ArrayList<>();
-        List<HistoryEntity> historyEntity = userOptional.get().getHistoryEntities();
+        List<HistoryEntity> historyEntity = historyRepository.findByUser(userOptional.get());
         historyEntity.forEach(h -> {
 //            ResProductDto productDto = ResProductDto.builder()
 //                    .name(h.getProduct().getName())
