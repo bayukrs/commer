@@ -11,21 +11,24 @@ import com.synrgy.commit.repository.oauth.UserRepository;
 import com.synrgy.commit.service.EmailSender;
 import com.synrgy.commit.util.EmailTemplate;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -67,6 +70,17 @@ public class DashboardController {
     String failed = "alert-danger";
     @Value("${file.base.url.aws}")
     private String fileBaseUrl;
+
+    @GetMapping(value = "/image/commer_white.png", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    public @ResponseBody byte[] getImage() throws IOException, URISyntaxException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource("logo/commer_white.png");
+        File file = new File(resource.toURI());
+//        InputStream in = getClass().getResourceAsStream("/payment/"+image);
+        InputStream in = new BufferedInputStream(Files.newInputStream(file.toPath()));
+        System.out.println("Input : " + in);
+        return IOUtils.toByteArray(in);
+    }
 
     @GetMapping(value = {"/login"})
     public String index(Model model) {

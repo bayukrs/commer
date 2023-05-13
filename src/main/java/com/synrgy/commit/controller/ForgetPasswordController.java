@@ -90,7 +90,7 @@ public class ForgetPasswordController {
 
             userRepository.save(found);
 
-        emailSender.sendAsync(found.getUsername(), "Commit - Forget Password", template);
+        emailSender.sendAsync(found.getUsername(), "Commer - Forget Password", template);
 
 
         return response.Sukses("Succesfull send email!");
@@ -250,7 +250,7 @@ public class ForgetPasswordController {
 
             User dosave = userRepository.save(found);
 
-        emailSender.sendAsync(found.getUsername(), "Commit - Forget Password", template);
+        emailSender.sendAsync(found.getUsername(), "Commer - Forget Password", template);
 
 
         return response.Sukses("Succesfull send email!");
