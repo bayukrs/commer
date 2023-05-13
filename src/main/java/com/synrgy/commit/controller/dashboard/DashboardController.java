@@ -73,9 +73,7 @@ public class DashboardController {
 
     @GetMapping(value = "/image/commer_white.png", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public @ResponseBody byte[] getImage() throws IOException, URISyntaxException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource("logo/commer_white.png");
-        File file = new File(resource.toURI());
+        File file = new File("/logo/commer_white.png");
 //        InputStream in = getClass().getResourceAsStream("/payment/"+image);
         InputStream in = new BufferedInputStream(Files.newInputStream(file.toPath()));
         System.out.println("Input : " + in);
