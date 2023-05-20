@@ -165,6 +165,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ResHistoryTransaction> historyTransaction(Principal principal) {
 
         User user = getUserIdToken(principal, userDetailsService);
+        log.info(user.toString());
         Optional<User> userOptional = userRepository.findById(user.getId());
         if (!userOptional.isPresent()){
             return null;
@@ -182,11 +183,32 @@ public class ProductServiceImpl implements ProductService {
                     .id(h.getId())
                     .amount(IdrFormatMoney.currencyIdrFromDouble(h.getProduct().getPrice()))
                     .isPaid(h.getPayed())
-//                    .link(h.getLinkPayment())
+                    .productName(h.getProduct().getName())
                     .build();
             historyTransactions.add(historyTransaction);
         });
         return historyTransactions;
+    }
+
+    @Override
+    public List<ResHistoryTransaction> historyTransaction(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (!userOptional.isPresent()){
+            return null;
+        }
+        List<ResHistoryTransaction> historyTransactions = new ArrayList<>();
+        List<HistoryEntity> historyEntity = historyRepository.findByUser(userOptional.get());
+        historyEntity.forEach(h -> {
+            ResHistoryTransaction historyTransaction = ResHistoryTransaction.builder()
+                    .id(h.getId())
+                    .amount(IdrFormatMoney.currencyIdrFromDouble(h.getProduct().getPrice()))
+                    .isPaid(h.getPayed())
+                    .productName(h.getProduct().getName())
+                    .build();
+            historyTransactions.add(historyTransaction);
+        });
+        return historyTransactions;
+
     }
 
     @Override

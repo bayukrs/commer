@@ -160,7 +160,7 @@
                                             <th th:utext="${history.user.id}"></th>
                                         </tr>
                                         <tr>
-                                            <th>Status</th>
+                                            <th>Status Payment</th>
                                             <th th:utext="${history.payed}" ></th>
                                         </tr>
                                         <tr>
@@ -199,10 +199,10 @@
                                             <th>Description</th>
                                             <th th:utext="${product.desc}" ></th>
                                         </tr>
-                                        <tr>
-                                            <th>Is Paid</th>
-                                            <th th:utext="${product.sold}" ></th>
-                                        </tr>
+<!--                                        <tr>-->
+<!--                                            <th>Is Paid</th>-->
+<!--                                            <th th:utext="${history.payed}" ></th>-->
+<!--                                        </tr>-->
                                         <tr>
                                             <th>Image</th>
                                             <th><img width="100px" th:src="${product.image}"></th>
@@ -210,6 +210,54 @@
                                         <tr>
                                             <th>Created Date</th>
                                             <th th:utext="${product.addedDate}" ></th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <div class="card">
+                            <div class="card-header card-header-icon" data-background-color="rose">
+                                <i class="material-icons">assignment</i>
+                            </div>
+                            <h4 class="card-title">Detail User</h4>
+                            <div class="card-content">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>User ID</th>
+                                            <th th:utext="${user.id}"></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th th:utext="${user.fullname}"></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Phone Number</th>
+                                            <th>
+                                                <a th:href="'https://wa.me/' + ${user.phone_number}">
+                                                    <p th:text="${user.phone_number}"></p>
+                                                </a>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>Gender</th>
+                                            <th th:utext="${user.gender}" ></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Region</th>
+                                            <th th:utext="${user.region}" ></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Email</th>
+                                            <th th:text="${user.username}"></th>
+                                        </tr>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th th:utext="${user.status}" ></th>
                                         </tr>
                                         </thead>
                                     </table>

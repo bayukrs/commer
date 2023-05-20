@@ -13,6 +13,7 @@ public interface ProductService {
     ResProductDto getDetailProduct(Long id);
     BaseResponse<?> buyProduct(Long id, Principal principal);
     List<ResHistoryTransaction> historyTransaction(Principal principal);
+    List<ResHistoryTransaction> historyTransaction(Long id);
     ResHistoryTransaction detailHistoryTransaction(Long id);
 
     String updateStatus(ReqCallbackTransaction transactionDetails);

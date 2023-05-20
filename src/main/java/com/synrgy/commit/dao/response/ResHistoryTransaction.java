@@ -18,6 +18,8 @@ public class ResHistoryTransaction {
     private ResProductDto product;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String link;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String productName;
     private Boolean isPaid;
     private String amount;
 }

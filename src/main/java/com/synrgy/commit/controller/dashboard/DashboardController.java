@@ -225,10 +225,12 @@ public class DashboardController {
         }
         HistoryEntity history = historyRepository.findById(id_comment).get();
         ProductEntity product = history.getProduct();
+        User user = history.getUser();
         model.addAttribute("title", "Dashboard Commer | Detail Report Comment");
         model.addAttribute("url", url);
         model.addAttribute("history", history);
         model.addAttribute("product", product);
+        model.addAttribute("user", user);
         return "dashboard-history-detail";
     }
 

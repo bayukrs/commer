@@ -66,48 +66,6 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/history")
-    public ResponseEntity<BaseResponse<List<ResHistoryTransaction>>> getHistoryAll(Principal principal){
-        List<ResHistoryTransaction> resHistoryTransactions = productService.historyTransaction(principal);
-        if (resHistoryTransactions == null){
-            return ResponseEntity.badRequest().body(
-                    BaseResponse.<List<ResHistoryTransaction>>builder()
-                            .status("Failed")
-                            .message("Failed Get Data History")
-                            .build()
-            );
-        }
-        return ResponseEntity.badRequest().body(
-                BaseResponse.<List<ResHistoryTransaction>>builder()
-                        .status("Success")
-                        .message("Success Get Data History")
-                        .data(resHistoryTransactions)
-                        .build()
-        );
-    }
-
-    @GetMapping("/history/{id}")
-    public ResponseEntity<BaseResponse<ResHistoryTransaction>> getHistoryDetail(
-            Principal principal,
-            @PathVariable("id") Long id){
-        ResHistoryTransaction resHistoryTransactions = productService.detailHistoryTransaction(id);
-        if (resHistoryTransactions == null){
-            return ResponseEntity.badRequest().body(
-                    BaseResponse.<ResHistoryTransaction>builder()
-                            .status("Failed")
-                            .message("Failed Get Data History")
-                            .build()
-            );
-        }
-        return ResponseEntity.badRequest().body(
-                BaseResponse.<ResHistoryTransaction>builder()
-                        .status("Success")
-                        .message("Success Get Data History")
-                        .data(resHistoryTransactions)
-                        .build()
-        );
-    }
-
     @PostMapping("/callback")
     private ResponseEntity<BaseResponse<?>> getStatusTransaction(@RequestBody ReqCallbackTransaction reqCreatePayment){
         String result = productService.updateStatus(reqCreatePayment);
