@@ -172,6 +172,14 @@
                                                     <i class="material-icons">visibility</i>
                                                 </button>
                                             </a>
+                                            <button type="button" rel="tooltip" class="btn btn-danger btn-round" th:if="${product.sold == true}" disabled>
+                                                <i class="material-icons">visibility</i>
+                                            </button>
+                                            <a th:href="${url}+'/product/delete/'+${product.id}">
+                                                <button type="button" rel="tooltip" class="btn btn-danger btn-round" th:unless="${product.sold == true}">
+                                                    <i class="material-icons">visibility</i>
+                                                </button>
+                                            </a>
                                         </td>
                                         <td th:utext="${product.id}" class="text-center"></td>
                                         <td th:utext="${product.name}" class="text-center"></td>

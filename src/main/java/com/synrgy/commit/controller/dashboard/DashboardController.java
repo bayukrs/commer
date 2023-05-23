@@ -33,10 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -296,6 +293,26 @@ public class DashboardController {
         product.setImage(fileBaseUrl+"product/image/"+tempFileName);
         product.setSold(false);
         productRepository.save(product);
+//        ProductEntity product = productRepository.findById(id_comment).get();
+        model.addAttribute("title", "Dashboard Commer | Detail Report Comment");
+        model.addAttribute("url", url);
+        model.addAttribute("product", new ProductEntity());
+        return "redirect:/dashboard/product";
+    }
+
+    @GetMapping(value = {"/product/delete/{id}"})
+    public String deleteProduct(Model model,
+                                @PathVariable("id") Long id,
+                                HttpSession req, RedirectAttributes redirAttrs) throws IOException {
+        if (req.getAttribute("Admin") == null) {
+            redirAttrs.addFlashAttribute("message", "Login terlebih dahulu!");
+            redirAttrs.addFlashAttribute("alerto", failed);
+            return "redirect:/dashboard/login";
+        }
+        Optional<ProductEntity> product = productRepository.findById(id);
+        if (product.isPresent() && !product.get().getSold()){
+            productRepository.delete(product.get());
+        }
 //        ProductEntity product = productRepository.findById(id_comment).get();
         model.addAttribute("title", "Dashboard Commer | Detail Report Comment");
         model.addAttribute("url", url);
