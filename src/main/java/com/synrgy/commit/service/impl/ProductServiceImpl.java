@@ -15,6 +15,7 @@ import com.synrgy.commit.service.ProductService;
 import com.synrgy.commit.service.oauth.Oauth2UserDetailsService;
 import com.synrgy.commit.util.IdrFormatMoney;
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -74,7 +75,10 @@ public class ProductServiceImpl implements ProductService {
                     .images(p.getImage())
                     .price(IdrFormatMoney.currencyIdrFromDouble(p.getPrice()))
                     .build();
-            productDtos.add(dto);
+            var history = historyRepository.findByProduct(p);
+            if(history.stream().noneMatch(HistoryEntity::getPayed)){
+                productDtos.add(dto);
+            }
         });
         return productDtos;
     }
@@ -184,6 +188,7 @@ public class ProductServiceImpl implements ProductService {
                     .amount(IdrFormatMoney.currencyIdrFromDouble(h.getProduct().getPrice()))
                     .isPaid(h.getPayed())
                     .productName(h.getProduct().getName())
+                    .date(h.getAddedDate())
                     .build();
             historyTransactions.add(historyTransaction);
         });
@@ -204,6 +209,7 @@ public class ProductServiceImpl implements ProductService {
                     .amount(IdrFormatMoney.currencyIdrFromDouble(h.getProduct().getPrice()))
                     .isPaid(h.getPayed())
                     .productName(h.getProduct().getName())
+                    .date(h.getAddedDate())
                     .build();
             historyTransactions.add(historyTransaction);
         });
@@ -231,6 +237,7 @@ public class ProductServiceImpl implements ProductService {
                 .isPaid(h.getPayed())
                 .link(h.getLinkPayment())
                 .product(productDto)
+                .date(h.getAddedDate())
                 .build();
         return historyTransaction;
     }

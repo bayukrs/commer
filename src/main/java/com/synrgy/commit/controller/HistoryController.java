@@ -42,7 +42,7 @@ public class HistoryController {
                             .build()
             );
         }
-        return ResponseEntity.badRequest().body(
+        return ResponseEntity.ok(
                 BaseResponse.<List<ResHistoryTransaction>>builder()
                         .status("Success")
                         .message("Success Get Data History")
@@ -64,7 +64,7 @@ public class HistoryController {
                             .build()
             );
         }
-        return ResponseEntity.badRequest().body(
+        return ResponseEntity.ok(
                 BaseResponse.<ResHistoryTransaction>builder()
                         .status("Success")
                         .message("Success Get Data History")

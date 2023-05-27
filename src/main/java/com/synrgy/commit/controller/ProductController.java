@@ -75,7 +75,7 @@ public class ProductController {
                     .message("Order Id Not Found")
                     .build());
         }
-        return ResponseEntity.status(401).body(BaseResponse.builder()
+        return ResponseEntity.status(200).body(BaseResponse.builder()
                 .status("True")
                 .message("Success Update Status")
                 .build());
