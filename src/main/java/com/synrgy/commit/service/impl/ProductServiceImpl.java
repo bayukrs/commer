@@ -133,7 +133,7 @@ public class ProductServiceImpl implements ProductService {
                 .build();
         ReqItemDetail itemDetail = ReqItemDetail.builder()
                 .id(productEntity.get().getId().toString())
-                .name(productEntity.get().getName().substring(0, 49))
+                .name(productEntity.get().getName().length() > 50 ? productEntity.get().getName().substring(0, 49) : productEntity.get().getName())
                 .price(Math.toIntExact(productEntity.get().getPrice()))
                 .quantity(1)
                 .build();

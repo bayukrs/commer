@@ -81,7 +81,7 @@ public class Response {
     }
 
     public boolean notNumber(String phonenumber) {
-        String phoneRegex = "^0[0-9_.-]*$";
+        String phoneRegex = "^62[0-9_.-]*$";
 
         Pattern pat = Pattern.compile(phoneRegex);
 
