@@ -124,7 +124,7 @@ public class ProductServiceImpl implements ProductService {
         ReqTransactionDetail transactionDetail = ReqTransactionDetail.builder()
                 .order_id(historyEntity.getId().toString())
                 .gross_amount(Math.toIntExact(productEntity.get().getPrice()))
-                .payment_link_id(userOptional.get().getFullname() + "-" + historyEntity.getId())
+                .payment_link_id(userOptional.get().getFullname().trim() + "-" + historyEntity.getId())
                 .build();
         ReqCustomerDetail customerDetail = ReqCustomerDetail.builder()
                 .first_name(userOptional.get().getFullname())
