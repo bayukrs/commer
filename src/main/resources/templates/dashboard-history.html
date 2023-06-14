@@ -16,6 +16,9 @@
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
+    <!--     DataTable     -->
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.jqueryui.min.css" rel="stylesheet">
+
 </head>
 <body>
 <div class="wrapper">
@@ -149,7 +152,7 @@
                             <div class="card-content">
                                 <h4 class="card-title">History Transaction</h4>
                                 <h5 th:utext="'Total Data : ' + ${totaldata}" class="card-title"></h5>
-                                <table class="table table-hover">
+                                <table class="table table-hover" id="table-history">
                                     <thead>
                                     <tr>
                                         <th class="text-center">Actions</th>
@@ -174,6 +177,16 @@
                                         <td th:utext="${history.addedDate}" class="text-center"></td>
                                     </tr>
                                     </tbody>
+				    <tfoot>
+                                    <tr>
+                                        <th class="text-center">Actions</th>
+                                        <th class="text-center">ID Transaction</th>
+                                        <th class="text-center">amount</th>
+                                        <th class="text-center">Is Payed</th>
+                                        <th class="text-center">Date Created</th>
+                                    </tr>
+                                    </tfoot>
+
                                 </table>
                             </div>
                         </div>
@@ -213,6 +226,7 @@
 <script src="https://cdn.jsdelivr.net/gh/indrahsan/assets-commit/js/jquery.select-bootstrap.js"></script>
 <!--  DataTables.net Plugin    -->
 <script src="https://cdn.jsdelivr.net/gh/indrahsan/assets-commit/js/jquery.datatables.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <!-- Sweet Alert 2 plugin -->
 <script src="https://cdn.jsdelivr.net/gh/indrahsan/assets-commit/js/sweetalert2.js"></script>
 <!--	Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
@@ -225,4 +239,32 @@
 <script src="https://cdn.jsdelivr.net/gh/indrahsan/assets-commit/js/material-dashboard.js"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="https://cdn.jsdelivr.net/gh/indrahsan/assets-commit/js/demo.js"></script>
+<script>
+$(document).ready(function () {
+  $('#table-history').DataTable({
+        initComplete: function () {
+            this.api()
+                .columns([1,2,3,4])
+                .every(function () {
+                    var column = this;
+                    var select = $('<select class="form-control w-100"><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+ 
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+ 
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                });
+        },
+    });
+});
+</script>
 </html>

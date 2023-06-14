@@ -16,6 +16,8 @@
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
+    <!--     DataTable     -->
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.jqueryui.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="wrapper">
@@ -150,7 +152,7 @@
                             <div class="card-content">
                                 <h4 class="card-title">Report User</h4>
                                 <h5 th:utext="'Total Data : ' + ${totaldata}" class="card-title"></h5>
-                                <table class="table table-hover">
+                                <table class="table table-hover" id="table1">
                                     <thead>
                                     <tr>
                                         <th class="text-center">Actions</th>
@@ -214,6 +216,7 @@
 <script src="https://cdn.jsdelivr.net/gh/indrahsan/assets-commit/js/jquery.select-bootstrap.js"></script>
 <!--  DataTables.net Plugin    -->
 <script src="https://cdn.jsdelivr.net/gh/indrahsan/assets-commit/js/jquery.datatables.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <!-- Sweet Alert 2 plugin -->
 <script src="https://cdn.jsdelivr.net/gh/indrahsan/assets-commit/js/sweetalert2.js"></script>
 <!--	Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
@@ -226,4 +229,9 @@
 <script src="https://cdn.jsdelivr.net/gh/indrahsan/assets-commit/js/material-dashboard.js"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="https://cdn.jsdelivr.net/gh/indrahsan/assets-commit/js/demo.js"></script>
+<script>
+$(document).ready(function () {
+  $('#table1').DataTable();
+});
+</script>
 </html>

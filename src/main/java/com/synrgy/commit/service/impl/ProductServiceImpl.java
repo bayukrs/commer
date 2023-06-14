@@ -183,12 +183,13 @@ public class ProductServiceImpl implements ProductService {
 //                    .desc(h.getProduct().getImage())
 //                    .price(IdrFormatMoney.currencyIdrFromDouble(h.getProduct().getPrice()))
 //                    .build();
+
             ResHistoryTransaction historyTransaction = ResHistoryTransaction.builder()
                     .id(h.getId())
                     .amount(IdrFormatMoney.currencyIdrFromDouble(h.getProduct().getPrice()))
                     .isPaid(h.getPayed())
                     .productName(h.getProduct().getName())
-                    .date(h.getAddedDate())
+                    .date(new Date(h.getAddedDate().getTime()))
                     .build();
             historyTransactions.add(historyTransaction);
         });
@@ -209,7 +210,7 @@ public class ProductServiceImpl implements ProductService {
                     .amount(IdrFormatMoney.currencyIdrFromDouble(h.getProduct().getPrice()))
                     .isPaid(h.getPayed())
                     .productName(h.getProduct().getName())
-                    .date(h.getAddedDate())
+                    .date(new Date(h.getAddedDate().getTime()))
                     .build();
             historyTransactions.add(historyTransaction);
         });
@@ -237,7 +238,7 @@ public class ProductServiceImpl implements ProductService {
                 .isPaid(h.getPayed())
                 .link(h.getLinkPayment())
                 .product(productDto)
-                .date(h.getAddedDate())
+                .date(new Date(h.getAddedDate().getTime()))
                 .build();
         return historyTransaction;
     }
